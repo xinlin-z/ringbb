@@ -1,2 +1,4 @@
 # ringbb
-Auto-resizable Ring Byte Buffer class in C++
+
+Head-only Auto-resizable Ring Byte Buffer template in C++.
+
