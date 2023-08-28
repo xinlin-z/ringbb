@@ -6,16 +6,20 @@
 #include <cassert>
 
 
+#define STATIC_TYPE_ASSERTS(X)  \
+    static_assert(sizeof(X)==1,           "sizeof(T) != 1."); \
+    static_assert(!std::is_same_v<X,bool>,"bool type is not supported."); \
+    static_assert(!std::is_class_v<X>,    "class type is not supported.");\
+    static_assert(!std::is_array_v<X>,    "array type is not supported.");\
+    /* sizeof(void)==1, and you can only get a warning */ \
+    static_assert(!std::is_void_v<X>,     "void type is not supported."); \
+    /* new operator cannot be applied to a reference type */ \
+    static_assert(!std::is_reference_v<X>,"ref type is not supported.");\
+
+
 template<typename T=std::byte>
 struct ring_byte_buf{
-    static_assert(sizeof(T)==1,           "sizeof(T) != 1.");
-    static_assert(!std::is_same_v<T,bool>,"bool type is not supported.");
-    static_assert(!std::is_class_v<T>,    "class type is not supported.");
-    static_assert(!std::is_array_v<T>,    "array type is not supported.");
-    // sizeof(void)==1, and you only get a warning
-    static_assert(!std::is_void_v<T>,     "void type is not supported.");
-    // new cannot be applied to a reference type
-    static_assert(!std::is_reference_v<T>,"reference type is not supported.");
+    STATIC_TYPE_ASSERTS(T);
 
     using value_type = T;
     using type = ring_byte_buf<T>;
@@ -152,7 +156,7 @@ void ring_byte_buf<T>::_recap(const U *cont, size_t len,
 template<typename T>
 template<typename U>
 void ring_byte_buf<T>::push_back(const U *cont, size_t len) {
-    static_assert(sizeof(U)==1, "sizeof(U) != 1.");
+    STATIC_TYPE_ASSERTS(U);
     if (len == 0)
         return;
     mutex.lock();
@@ -217,7 +221,7 @@ void ring_byte_buf<T>::push_back(const char (&a)[N]){  // char array
 template<typename T>
 template<typename U>
 void ring_byte_buf<T>::push_front(const U *cont, size_t len) {
-    static_assert(sizeof(U)==1, "sizeof(U) != 1.");
+    STATIC_TYPE_ASSERTS(U);
     if (len == 0)
         return;
     mutex.lock();
@@ -280,7 +284,7 @@ void ring_byte_buf<T>::_pop_all(U *cont) noexcept{
 template<typename T>
 template<typename U>
 size_t ring_byte_buf<T>::pop_front(U *cont, size_t len) noexcept{
-    static_assert(sizeof(U)==1, "sizeof(U) != 1.");
+    STATIC_TYPE_ASSERTS(U);
     size_t retval;
     mutex.lock();
     if (ocsize == 0)
@@ -313,7 +317,7 @@ size_t ring_byte_buf<T>::pop_front(U *cont, size_t len) noexcept{
 template<typename T>
 template<typename U>
 size_t ring_byte_buf<T>::pop_back(U *cont, size_t len) noexcept{
-    static_assert(sizeof(U)==1, "sizeof(U) != 1.");
+    STATIC_TYPE_ASSERTS(U);
     size_t retval;
     mutex.lock();
     if (ocsize == 0)
