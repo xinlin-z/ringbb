@@ -24,7 +24,7 @@ struct ring_byte_buf{
     using value_type = T;
     using type = ring_byte_buf<T>;
 
-    explicit ring_byte_buf(size_t init_size=0);
+    explicit ring_byte_buf(size_t init_size=4096);
     ~ring_byte_buf();
 
     template<typename U>

@@ -20,7 +20,7 @@ using namespace std;
 
 
 void test_empty(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     HOPE_EQ(rb.capacity(), 0);
     HOPE_EQ(rb.size(), 0);
     HOPE_EQ(rb.empty(), true);
@@ -47,7 +47,7 @@ void test_empty(){
 
 
 void test_push_back_1(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     rb.push_back("", 0);
     HOPE_EQ(rb.size(), 0);
     HOPE_EQ(rb.empty(), true);
@@ -86,7 +86,7 @@ void test_push_back_1(){
 
 
 void test_push_back_2(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     string s1 {};
     rb.push_back(s1);
     HOPE_EQ(rb.size(), 0);
@@ -106,7 +106,7 @@ void test_push_back_2(){
 
 
 void test_push_back_3(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     const char *s1 {""};
     rb.push_back(s1);
     HOPE_EQ(rb.size(), 0);
@@ -129,7 +129,7 @@ void test_push_back_3(){
 
 
 void test_pop_front_1(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     rb.push_back("12345", 5);
     HOPE_EQ(rb.size(), 5);
     HOPE_EQ(rb.capacity(), 8);
@@ -268,7 +268,7 @@ void test_stress_2(){
 
 
 void test_stress_3(){
-    ring_byte_buf rb;
+    ring_byte_buf rb{0};
     std::byte a[10] {};
     int n;
 
