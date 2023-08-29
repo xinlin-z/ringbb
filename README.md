@@ -1,4 +1,10 @@
 # ringbb
 
-Head-only Auto-resizable Thread-safe Ring Byte Buffer template in C++!
+Fast Head-only Auto-resizable Thread-safe Ring Byte Buffer template in C++!
+
+To test in Linux:
+
+```shell
+$ make
+```
 

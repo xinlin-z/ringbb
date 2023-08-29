@@ -1,7 +1,8 @@
 /*
  * FileName: ring_byte_buf.hpp
  * Author:   xinlin-z
- * Desc:     Head-only Auto-resizable Thread-safe Ring Byte Buffer template!
+ * Desc:     Fast Head-only Auto-resizable Thread-safe
+ *           Ring Byte Buffer template in C++!
  * Blog:     https://cs.pynote.net
  * Github:   https://github.com/xinlin-z/ringbb
  */
