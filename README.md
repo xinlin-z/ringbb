@@ -8,3 +8,5 @@ To test in Linux:
 $ make
 ```
 
+If no FAILED, it's passed!
+
