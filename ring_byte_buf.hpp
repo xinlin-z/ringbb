@@ -1,3 +1,10 @@
+/*
+ * FileName: ring_byte_buf.hpp
+ * Author:   xinlin-z
+ * Desc:     Head-only Auto-resizable Thread-safe Ring Byte Buffer template!
+ * Blog:     https://cs.pynote.net
+ * Github:   https://github.com/xinlin-z/ringbb
+ */
 #ifndef _RING_BYTE_BUF_HPP
 #define _RING_BYTE_BUF_HPP 1
 #include <cstring>
@@ -61,11 +68,13 @@ struct ring_byte_buf{
     void push_front(const char (&a)[N]);
     void push_front(const char *cont);
 
-    template<typename U>
-    size_t pop_front(U *cont, size_t len) noexcept;
-
+    // pop_back
     template<typename U>
     size_t pop_back(U *cont, size_t len) noexcept;
+
+    // pop_front
+    template<typename U>
+    size_t pop_front(U *cont, size_t len) noexcept;
 
 private:
     T *p;
