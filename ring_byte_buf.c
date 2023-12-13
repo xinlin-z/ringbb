@@ -1,6 +1,7 @@
-#include "ring_byte_buffer.h"
+#include "ring_byte_buf.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>  // -lm
 
 
 static inline void _read_all2buf(ringbb *rbb, void *buf){
@@ -44,7 +45,8 @@ bool rbb_init(ringbb *rbb, size_t len){
     rbb->buf = (unsigned char*)malloc(len);
     if(!rbb->buf)
         return false;
-    rbb->capacity = rbb->size = rbb->wp = rbb->rp = 0;
+    rbb->capacity = len;
+    rbb->size = rbb->wp = rbb->rp = 0;
     return true;
 }
 
