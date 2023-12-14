@@ -89,6 +89,8 @@ void test_3(){
     HOPE_EQ(rb.capacity, 128);
     r = rbb_pop_front(&rb, &c, 1);
     HOPE_EQ(r, 0);
+    r = rbb_pop_front(&rb, &c, 0);
+    HOPE_EQ(r, 0);
     rbb_free(&rb);
 }
 
@@ -97,7 +99,7 @@ int main(){
     test_1();
     test_2();
     test_3();
-    printf("Done!\n");
+    printf("Done! (No FAILED means pass)\n");
     return 0;
 }
 

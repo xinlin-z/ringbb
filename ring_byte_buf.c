@@ -5,7 +5,7 @@
 
 
 static inline void _read_all2buf(ringbb *rbb, void *buf){
-    if(rbb->wp > rbb->rp)
+    if(rbb->wp >= rbb->rp)
         memcpy(buf, rbb->buf+rbb->rp, rbb->size);
     else{
         size_t rrlen = rbb->capacity - rbb->rp;
@@ -95,8 +95,6 @@ bool rbb_push_front(ringbb *rbb, const void *mem, size_t len){
 
 
 size_t rbb_pop_front(ringbb *rbb, void *buf, size_t len){
-    if(rbb->size == 0)
-        return 0;
     size_t rt = len;
     if(rbb->size >= len){
         if(rbb->capacity-rbb->rp >= len){
