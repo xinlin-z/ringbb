@@ -13,11 +13,11 @@
 void test_1(){
     ringbb rb;
     rbb_init(&rb, 10);
-    HOPE_EQ(rb.capacity, 16);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 0);
     char *m1 = "0123456789";
     rbb_push_back(&rb, m1, strlen(m1));
-    HOPE_EQ(rb.capacity, 16);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, strlen(m1));
     char p1[16] = {};
     size_t r = rbb_pop_front(&rb, p1, 16);
@@ -34,32 +34,36 @@ void test_1(){
 void test_2(){
     ringbb rb;
     rbb_init(&rb, 0);
-    HOPE_EQ(rb.capacity, 0);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 0);
     char *m1 = "0123456789";
     rbb_push_back(&rb, m1, 0);
-    HOPE_EQ(rb.capacity, 0);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 0);
     rbb_push_back(&rb, m1, 1);
-    HOPE_EQ(rb.capacity, 1);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 1);
     rbb_push_back(&rb, m1, 1);
-    HOPE_EQ(rb.capacity, 2);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 2);
     rbb_push_back(&rb, m1, 1);
-    HOPE_EQ(rb.capacity, 4);
+    HOPE_EQ(rb.capacity, 64);
     HOPE_EQ(rb.size, 3);
     rbb_free(&rb);
+
     rbb_init(&rb, 0);
-    rbb_push_back(&rb, m1, 10);
-    HOPE_EQ(rb.capacity, 16);
-    HOPE_EQ(rb.size, 10);
-    rbb_push_back(&rb, m1, 10);
-    HOPE_EQ(rb.capacity, 32);
-    HOPE_EQ(rb.size, 20);
-    rbb_push_back(&rb, m1, 10);
-    HOPE_EQ(rb.capacity, 32);
-    HOPE_EQ(rb.size, 30);
+    for(int i=0; i<10; ++i)
+        rbb_push_back(&rb, m1, 10);
+    HOPE_EQ(rb.capacity, 128);
+    HOPE_EQ(rb.size, 100);
+    for(int i=0; i<10; ++i)
+        rbb_push_back(&rb, m1, 10);
+    HOPE_EQ(rb.capacity, 256);
+    HOPE_EQ(rb.size, 200);
+    for(int i=0; i<10; ++i)
+        rbb_push_back(&rb, m1, 10);
+    HOPE_EQ(rb.capacity, 512);
+    HOPE_EQ(rb.size, 300);
     rbb_free(&rb);
 }
 

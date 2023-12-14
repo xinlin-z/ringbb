@@ -43,6 +43,7 @@ static inline bool _recap(ringbb *rbb,
 
 bool rbb_init(ringbb *rbb, size_t len){
     size_t need_size = pow(2.0, (int)ceil(log2(len)));
+    need_size = need_size<=64?64:need_size;  // min 64 at init
     rbb->buf = (unsigned char*)malloc(need_size);
     if(!rbb->buf)
         return false;
