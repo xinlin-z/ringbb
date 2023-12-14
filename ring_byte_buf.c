@@ -25,10 +25,8 @@ static inline bool _recap(ringbb *rbb,
 
     if(!is_push_back)
         memcpy(buf, mem, len);
-
     _read_all2buf(rbb, buf+(is_push_back?0:len));
     free(rbb->buf);
-
     if(is_push_back)
         memcpy(buf+rbb->size, mem, len);
 
@@ -78,6 +76,24 @@ bool rbb_push_back(ringbb *rbb, const void *mem, size_t len){
 }
 
 
+bool rbb_push_front(ringbb *rbb, const void *mem, size_t len){
+    if(len <= rbb->capacity-rbb->size){
+        if(rbb->rp >= len){
+            memcpy(rbb->buf+(rbb->rp-len), mem, len);
+            rbb->rp -= len;
+        }else{
+            size_t rwlen = len - rbb->rp;
+            rbb->rp = rbb->capacity - rwlen;
+            memcpy(rbb->buf+rbb->rp, mem, rwlen);
+            memcpy(rbb->buf, mem+rwlen, len-rwlen);
+        }
+        rbb->size += len;
+        return true;
+    }else
+        return _recap(rbb, mem, len, false);
+}
+
+
 size_t rbb_pop_front(ringbb *rbb, void *buf, size_t len){
     if(rbb->size == 0)
         return 0;
@@ -91,6 +107,29 @@ size_t rbb_pop_front(ringbb *rbb, void *buf, size_t len){
             memcpy(buf, rbb->buf+rbb->rp, rrlen);
             memcpy(buf+rrlen, rbb->buf, len-rrlen);
             rbb->rp = len - rrlen;
+        }
+        rbb->size -= len;
+    }else{
+        _read_all2buf(rbb, buf);
+        rbb->rp = rbb->wp;
+        rt = rbb->size;
+        rbb->size = 0;
+    }
+    return rt;
+}
+
+
+size_t rbb_pop_back(ringbb *rbb, void *buf, size_t len){
+    size_t rt = len;
+    if(rbb->size >= len){
+        if(rbb->wp >= len){
+            memcpy(buf, rbb->buf+rbb->wp-len, len);
+            rbb->wp -= len;
+        }else{
+            size_t rrlen = len - rbb->wp;
+            rbb->wp = rbb->capacity - rrlen;
+            memcpy(buf, rbb->buf+rbb->wp, rrlen);
+            memcpy(buf+rrlen, rbb->buf, len-rrlen);
         }
         rbb->size -= len;
     }else{
