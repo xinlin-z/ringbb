@@ -9,13 +9,6 @@
     }while(0)
 
 
-#define HOPE_LE(a,b) \
-    do{\
-        if(a > b)\
-            fprintf(stderr, "HOPE_LE FAILED %s:%d\n", __FILE__, __LINE__);\
-    }while(0)
-
-
 int main(){
     ringbb rb;
     rbb_init(&rb, 16);
