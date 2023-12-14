@@ -1,7 +1,13 @@
 #ifndef RING_BYTE_BUF_H
 #define RING_BYTE_BUF_H 1
+
+#ifndef __cplusplus
 #include <stdio.h>
 #include <stdbool.h>
+#else
+#include <cstdio>
+#include <cstdbool>
+#endif
 
 
 struct ringbb{
