@@ -5,7 +5,7 @@
 
 
 static inline void _read_all2buf(ringbb *rb, void *buf){
-    if(rb->wp >= rb->rp)
+    if(rb->wp >= rb->rp)  // wp==rp when size==0
         memcpy(buf, rb->buf+rb->rp, rb->size);
     else{
         size_t rrlen = rb->capacity - rb->rp;
@@ -15,9 +15,8 @@ static inline void _read_all2buf(ringbb *rb, void *buf){
 }
 
 
-static inline bool _recap(ringbb *rb,
-                          const void *mem, size_t len,
-                          bool is_push_back){
+static inline bool _recap(ringbb *rb, const void *mem,
+                          size_t len, bool is_push_back){
     size_t need_size = pow(2.0, (int)ceil(log2(rb->size+len)));
     unsigned char *buf = (unsigned char*)malloc(need_size);
     if(!buf)
