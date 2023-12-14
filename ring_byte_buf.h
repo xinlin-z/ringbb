@@ -18,12 +18,18 @@ typedef struct ringbb ringbb;
 #endif
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 bool rbb_init(ringbb*, size_t);
 void rbb_free(ringbb*);
 bool rbb_push_back(ringbb*, const void*, size_t);
 bool rbb_push_front(ringbb*, const void*, size_t);
 size_t rbb_pop_front(ringbb*, void*, size_t);
 size_t rbb_pop_back(ringbb*, void*, size_t);
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif
