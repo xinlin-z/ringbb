@@ -83,6 +83,8 @@ void test_3(){
         HOPE_EQ(rb.size, 128-i-1);
     }
     HOPE_EQ(rb.capacity, 128);
+    r = rbb_pop_front(&rb, &c, 1);
+    HOPE_EQ(r, 0);
     rbb_free(&rb);
 }
 
