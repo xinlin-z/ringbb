@@ -42,10 +42,11 @@ static inline bool _recap(ringbb *rbb,
 
 
 bool rbb_init(ringbb *rbb, size_t len){
-    rbb->buf = (unsigned char*)malloc(len);
+    size_t need_size = pow(2.0, (int)ceil(log2(len)));
+    rbb->buf = (unsigned char*)malloc(need_size);
     if(!rbb->buf)
         return false;
-    rbb->capacity = len;
+    rbb->capacity = need_size;
     rbb->size = rbb->wp = rbb->rp = 0;
     return true;
 }
