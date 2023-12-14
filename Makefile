@@ -1,4 +1,5 @@
 CC := gcc
+CXX := g++
 
 .RECIPEPREFIX = >
 .PHONY: all lib clean
@@ -13,7 +14,7 @@ testc: test_ringbb.c
 > $(CC) -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . $^ -o $@ -L. -lringbb
 
 cpptest: cpptest.cpp
-> g++ -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . $^ -o $@ -L. -lringbb
+> $(CXX) -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . $^ -o $@ -L. -lringbb
 
 clean:
 > rm -f testc
