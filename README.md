@@ -1,7 +1,9 @@
 # ringbb
 
-Ring Byte Buffer in pure C, auto resizable but no thread safe. Then it can be
-used in different scenarios and both C and C++ flexibly.
+Ring Byte Buffer in pure C, auto resizable, no thread safe, and with
+the capability to push(write) the pop(read) data buffer in both sides.
+It could then be used flexibly in different scenarios and
+with C and C++ respectively.
 
 Interfaces:
 
