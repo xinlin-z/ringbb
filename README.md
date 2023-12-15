@@ -5,7 +5,7 @@ the capability to push(write) the pop(read) data buffer in both sides.
 It could then be used flexibly in different scenarios and
 with C and C++ respectively.
 
-Interfaces:
+**Interface**
 
 ```c
 bool rbb_init(ringbb*, size_t);
@@ -18,7 +18,7 @@ size_t rbb_pop_front(ringbb*, void*, size_t);
 size_t rbb_pop_back(ringbb*, void*, size_t);
 ```
 
-Test on Linux:
+**Test on Linux**
 
 ```shell
 $ make
@@ -27,4 +27,8 @@ $ ./cpptest
 ```
 
 If no FAILED literal, it's passed!
+
+**Example**
+
+`test_ringbb.c` and `cpptest.cpp` can be taken as examples.
 
