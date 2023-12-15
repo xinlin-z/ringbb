@@ -13,9 +13,9 @@
 struct ringbb{
     size_t capacity;
     size_t size;
-    size_t rp;
-    size_t wp;
-    unsigned char *buf;
+    size_t _rp;
+    size_t _wp;
+    unsigned char *_buf;
 };
 
 
