@@ -20,6 +20,7 @@ size_t rbb_pop_back(ringbb*, void*, size_t);
 To access ring byte buffer's capacity and size, just visit the member
 variable. Suppose `rb` is a pointer to ringbb struct (check
 ring_byte_buf.h), capacity is `rb->capacity`, size is `rb->size`.
+You can only read them, do not modify them in any case!!
 
 **Test on Linux**
 
