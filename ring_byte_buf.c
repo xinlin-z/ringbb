@@ -73,6 +73,12 @@ bool rbb_shrink(ringbb *rb){
     return true;
 }
 
+
+bool rbb_empty(const ringbb *rb){
+    return rb->size == 0;
+}
+
+
 bool rbb_push_back(ringbb *rb, const void *mem, size_t len){
     if(len <= rb->capacity - rb->size){
         if(rb->wp + len <= rb->capacity){

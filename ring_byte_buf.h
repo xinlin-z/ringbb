@@ -30,6 +30,7 @@ extern "C" {
 bool rbb_init(ringbb*, size_t);
 void rbb_free(ringbb*);
 bool rbb_shrink(ringbb*);
+bool rbb_empty(const ringbb*);
 bool rbb_push_back(ringbb*, const void*, size_t);
 bool rbb_push_front(ringbb*, const void*, size_t);
 size_t rbb_pop_front(ringbb*, void*, size_t);
