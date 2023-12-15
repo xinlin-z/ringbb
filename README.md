@@ -1,12 +1,27 @@
 # ringbb
 
-Fast Head-only Auto-resizable Thread-safe Ring Byte Buffer template in C++!
+Ring Byte Buffer in pure C, auto resizable but no thread safe. Then it can be
+used in different scenarios and both C and C++ flexibly.
 
-To test in Linux:
+Interfaces:
+
+```c
+bool rbb_init(ringbb*, size_t);
+void rbb_free(ringbb*);
+bool rbb_shrink(ringbb*);
+bool rbb_push_back(ringbb*, const void*, size_t);
+bool rbb_push_front(ringbb*, const void*, size_t);
+size_t rbb_pop_front(ringbb*, void*, size_t);
+size_t rbb_pop_back(ringbb*, void*, size_t);
+```
+
+Test on Linux:
 
 ```shell
 $ make
+$ ./testc
+$ ./cpptest
 ```
 
-If no FAILED, it's passed!
+If no FAILED literal, it's passed!
 
