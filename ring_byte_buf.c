@@ -57,6 +57,22 @@ void rbb_free(ringbb *rb){
 }
 
 
+bool rbb_shrink(ringbb *rb){
+    size_t need_size = pow(2.0, (int)ceil(log2(rb->size)));
+    if(need_size == rb->capacity)
+        return true;
+    unsigned char *buf = (unsigned char*)malloc(need_size);  // might lt 64
+    if(!buf)
+        return false;
+    _read_all2buf(rb, buf);
+    free(rb->buf);
+    rb->buf = buf;
+    rb->capacity = need_size;
+    rb->wp = rb->size;
+    rb->rp = 0;
+    return true;
+}
+
 bool rbb_push_back(ringbb *rb, const void *mem, size_t len){
     if(len <= rb->capacity - rb->size){
         if(rb->wp + len <= rb->capacity){
