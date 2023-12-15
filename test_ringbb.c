@@ -274,7 +274,6 @@ void test_6(){
     rbb_shrink(&rb);
     HOPE_EQ(rb.capacity, 0);
     HOPE_EQ(rb.size, 0);
-    HOPE_EQ(rbb_empty(&rb), true);
     rbb_free(&rb);
 }
 

@@ -11,12 +11,15 @@ with C and C++ respectively.
 bool rbb_init(ringbb*, size_t);
 void rbb_free(ringbb*);
 bool rbb_shrink(ringbb*);
-bool rbb_empty(const ringbb*);
 bool rbb_push_back(ringbb*, const void*, size_t);
 bool rbb_push_front(ringbb*, const void*, size_t);
 size_t rbb_pop_front(ringbb*, void*, size_t);
 size_t rbb_pop_back(ringbb*, void*, size_t);
 ```
+
+To access ring byte buffer's capacity and size, just visit the member
+variable. Suppose `rb` is a pointer to ringbb struct (check
+ring_byte_buf.h), capacity is `rb->capacity`, size is `rb->size`.
 
 **Test on Linux**
 
