@@ -3,12 +3,14 @@
  * */
 #include "ring_byte_buf.h"
 #include <cstring>
+#include <iostream>
+using namespace std;
 
 
 #define HOPE_EQ(a,b) \
     do{\
         if((a) != (b))\
-            fprintf(stderr, "HOPE_EQ FAILED %s:%d\n", __FILE__, __LINE__);\
+            cerr<<"HOPE_EQ FAILED "<< __FILE__<<":"<< __LINE__<<endl;\
     }while(0)
 
 
@@ -31,5 +33,5 @@ int main(){
     r = rbb_pop_front(&rb, p1, 0);
     HOPE_EQ(r, 0);
     rbb_free(&rb);
-    printf("Done!\n");
+    cout << "Done!\n";
 }
