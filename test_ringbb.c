@@ -204,6 +204,29 @@ void test_4(){
 void test_41(){
     ringbb rb;
     rbb_init(&rb, 64);
+    char *m1 = "0123456789";
+    char c10[10] = {};
+    for(int i=0; i<1000; ++i)
+        rbb_push_back(&rb, m1, 10);
+    for(int i=0; i<1000; ++i){
+        HOPE_EQ(rbb_pop_front(&rb,&c10,10), 10);
+        HOPE_EQ(memcmp(m1,c10,10), 0);
+    }
+    HOPE_EQ(rb.size, 0);
+    for(int i=0; i<1000; ++i)
+        rbb_push_front(&rb, m1, 10);
+    for(int i=0; i<1000; ++i){
+        HOPE_EQ(rbb_pop_back(&rb,&c10,10), 10);
+        HOPE_EQ(memcmp(m1,c10,10), 0);
+    }
+    HOPE_EQ(rb.size, 0);
+    rbb_free(&rb);
+}
+
+
+void test_42(){
+    ringbb rb;
+    rbb_init(&rb, 64);
     char *m1 = "0123456";
     char c10[10] = {};
     for(int i=0; i<1000; ++i){
@@ -264,6 +287,7 @@ int main(){
     test_31();
     test_4();
     test_41();
+    test_42();
     test_5();
     test_6();
     printf("Done! (No FAILED means pass)\n");
