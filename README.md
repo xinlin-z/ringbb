@@ -1,38 +1,39 @@
 # ringbb
 
-Ring Byte Buffer in pure C, auto resizable, no thread safe, and with
-the capability to push(write) the pop(read) data buffer in both sides.
-It could then be used flexibly in different scenarios and
-with C and C++ respectively.
+Ring Byte Buffer in C, auto resizable, no thread-safe, and with
+the capability to push (write) the pop (read) data in both ends (deque).
 
 **Interface**
 
 ```c
-bool rbb_init(ringbb*, size_t);
-void rbb_free(ringbb*);
-bool rbb_shrink(ringbb*);
-bool rbb_push_back(ringbb*, const void*, size_t);
-bool rbb_push_front(ringbb*, const void*, size_t);
-size_t rbb_pop_front(ringbb*, void*, size_t);
+#ifdef __cplusplus
+extern "C" {
+#endif
+bool   rbb_init(ringbb*, size_t);
+void   rbb_free(ringbb*);
+bool   rbb_push_back(ringbb*, const void*, size_t);
+bool   rbb_push_front(ringbb*, const void*, size_t);
 size_t rbb_pop_back(ringbb*, void*, size_t);
-```
+size_t rbb_pop_front(ringbb*, void*, size_t);
+bool   rbb_shrink(ringbb*);
 
-To access ring byte buffer's capacity and size, just visit the member
-variable. Suppose `rb` is a pointer to ringbb struct (check
-ring_bytebuf.h), capacity is `rb->capacity`, size is `rb->size`.
-You can only read them, do not modify them in any case!!
+static inline bool   rbb_empty(const ringbb *rb) { return rb->size == 0; }
+static inline size_t rbb_size(const ringbb *rb) { return rb->size; }
+static inline size_t rbb_capacity(const ringbb *rb) { return rb->capacity; }
+static inline void   rbb_clear(ringbb *rb) { rb->size = rb->wp = rb->rp = 0; }
+#ifdef __cplusplus
+}
+#endif
+```
 
 **Test on Linux**
 
 ```shell
-$ make
-$ ./testc
-$ ./cpptest
+$ make all
+gcc -std=c99 -Wall -Wextra -O3 -fsanitize=address -shared -fPIC ring_byte_buf.c -o libringbb.so
+gcc -std=c99 -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . test_ringbb.c -o test -L. -lringbb
+./test
+All Pass!
+rm -f test
+rm -f libringbb.so
 ```
-
-If no FAILED literal, it's passed!
-
-**Example**
-
-`test_ringbb.c` and `cpptest.cpp` can be taken as examples.
-

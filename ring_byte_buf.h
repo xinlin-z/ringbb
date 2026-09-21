@@ -47,6 +47,12 @@ bool   rbb_push_front(ringbb*, const void*, size_t);
 size_t rbb_pop_back(ringbb*, void*, size_t);
 size_t rbb_pop_front(ringbb*, void*, size_t);
 bool   rbb_shrink(ringbb*);
+
+/* static inline in a header is fine in both C99+ and C++ */
+static inline bool   rbb_empty(const ringbb *rb) { return rb->size == 0; }
+static inline size_t rbb_size(const ringbb *rb) { return rb->size; }
+static inline size_t rbb_capacity(const ringbb *rb) { return rb->capacity; }
+static inline void   rbb_clear(ringbb *rb) { rb->size = rb->wp = rb->rp = 0; }
 #ifdef __cplusplus
 }
 #endif

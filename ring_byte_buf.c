@@ -3,7 +3,29 @@
 #include <string.h>
 
 
-static inline size_t _get_needed_size(size_t len)
+/*
+ * Reserved identifiers (C11 §7.1.3) -- do not use for your own names:
+ *
+ *   __foo, _Foo   : always reserved, any scope (compiler/libc internals).
+ *   _foo          : reserved at file scope -- includes `static` functions
+ *                   and globals. OK only for locals, parameters and
+ *                   struct members.
+ *   foo_t         : reserved by POSIX for typedefs.
+ *   E[A-Z0-9]...  : reserved for errno macros (<errno.h>).
+ *   str*, mem*, wcs*, is*, to* (lowercase) : reserved for future libc
+ *                   functions with external linkage.
+ *
+ * Why: system headers may #define any reserved name as a macro; the
+ * preprocessor then rewrites your definition and call sites silently.
+ * Non-static reserved names additionally clash with libc/runtime symbols
+ * at link time (_exit, _init, _start, ...).
+ *
+ * Rule here: private helpers are `static` with no prefix; anything
+ * exported carries the `rbb_` prefix.
+ */
+
+
+static inline size_t get_needed_size(size_t len)
 {
     /* never return 0, avoid malloc(0) */
     if(len == 0)
@@ -15,7 +37,7 @@ static inline size_t _get_needed_size(size_t len)
 }
 
 
-static inline void _read_all2buf(ringbb *rb, void *buf)
+static inline void read_all2buf(ringbb *rb, void *buf)
 {
     if(rb->size == 0)
         return;
@@ -31,24 +53,24 @@ static inline void _read_all2buf(ringbb *rb, void *buf)
 }
 
 
-static inline size_t _pop_all(ringbb *rb, void *buf)
+static inline size_t pop_all(ringbb *rb, void *buf)
 {
     size_t rt = rb->size;
-    _read_all2buf(rb, buf);
+    read_all2buf(rb, buf);
     rb->size = rb->rp = rb->wp = 0;
     return rt;
 }
 
 
-static bool _recap(ringbb *rb,
-                   const void *mem,
-                   size_t len,
-                   bool is_push_back)
+static bool recap(ringbb *rb,
+                  const void *mem,
+                  size_t len,
+                  bool is_push_back)
 {
     /* rb->size+len might be wrapped, - is safe! */
     if(len > RBB_BUF_MAX_SIZE - rb->size)
         return false;
-    size_t needed_size = _get_needed_size(rb->size+len);
+    size_t needed_size = get_needed_size(rb->size+len);
 
     /* len equals zero when shrink */
     if(len != 0)
@@ -66,7 +88,7 @@ static bool _recap(ringbb *rb,
         return false;
 
     /* copy all bytes to buf */
-    _read_all2buf(rb, buf + (is_push_back ? 0 : len));
+    read_all2buf(rb, buf + (is_push_back ? 0 : len));
 
     if(len != 0)
     {
@@ -91,7 +113,7 @@ bool rbb_init(ringbb *rb, size_t len)
     if(len > RBB_BUF_MAX_SIZE)
         return false;
 
-    size_t needed_size = _get_needed_size(len);
+    size_t needed_size = get_needed_size(len);
     rb->buf = (unsigned char*)malloc(needed_size);
     if(!rb->buf)
         return false;
@@ -112,11 +134,11 @@ void rbb_free(ringbb *rb)
 
 bool rbb_shrink(ringbb *rb)
 {
-    size_t needed_size = _get_needed_size(rb->size);
+    size_t needed_size = get_needed_size(rb->size);
     if(needed_size == rb->capacity)
         return true;
 
-    return _recap(rb, NULL, 0, true);
+    return recap(rb, NULL, 0, true);
 }
 
 
@@ -142,7 +164,7 @@ bool rbb_push_back(ringbb *rb, const void *mem, size_t len)
         rb->size += len;
         return true;
     } else
-        return _recap(rb, mem, len, true);
+        return recap(rb, mem, len, true);
 }
 
 
@@ -168,7 +190,7 @@ bool rbb_push_front(ringbb *rb, const void *mem, size_t len)
         rb->size += len;
         return true;
     } else
-        return _recap(rb, mem, len, false);
+        return recap(rb, mem, len, false);
 }
 
 
@@ -194,7 +216,7 @@ size_t rbb_pop_front(ringbb *rb, void *buf, size_t len)
         rb->size -= len;
         return len;
     } else
-        return _pop_all(rb, buf);
+        return pop_all(rb, buf);
 }
 
 
@@ -220,6 +242,6 @@ size_t rbb_pop_back(ringbb *rb, void *buf, size_t len)
         rb->size -= len;
         return len;
     } else
-        return _pop_all(rb, buf);
+        return pop_all(rb, buf);
 }
 
