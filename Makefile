@@ -1,18 +1,17 @@
-CC := gcc
-
-.RECIPEPREFIX = >
+.RECIPEPREFIX = $
 .PHONY: all lib clean
 
-all: lib testc
+all: run clean
 lib: libringbb.so
 
-libringbb.so: ring_byte_buf.c ring_byte_buf.h
-> $(CC) -Wall -Wextra -O3 -fsanitize=address -shared -fPIC $< -o $@
+run: test_ringbb.c libringbb.so
+$ gcc -std=c99 -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . $^ -o $@ -L. -lringbb
+$ ./run
 
-testc: test_ringbb.c
-> $(CC) -Wall -Wextra -O3 -fsanitize=address -Xlinker -rpath . $^ -o $@ -L. -lringbb
+libringbb.so: ring_byte_buf.c ring_byte_buf.h
+$ gcc -std=c99 -Wall -Wextra -O3 -fsanitize=address -shared -fPIC $< -o $@
 
 clean:
-> rm -f testc
-> rm -f libringbb.so
+$ rm -f run
+$ rm -f libringbb.so
 

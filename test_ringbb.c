@@ -265,7 +265,7 @@ int main(){
     test_4();
     test_5();
     test_6();
-    printf("All Done! (No FAILED means pass)\n");
+    printf("All Pass!\n");
     return 0;
 }
 

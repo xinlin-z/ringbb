@@ -7,6 +7,14 @@
 #endif
 
 
+/* inline,
+   // comment (double forward slash),
+   and for(int i...) are not supported in C89 */
+#if __STDC_VERSION__ < 199901L
+#error 'Please compile ringbb with C99 as the minimum C standard.'
+#endif
+
+
 /* both C&C++ support this syntax,
    but in C++, typedef is redundant */
 typedef struct ringbb{
@@ -19,13 +27,13 @@ typedef struct ringbb{
 
 
 /* it also serve as the minimum buffer length */
-#define RBB_BUF_LEN_UNIT     ((size_t)1 << 12)  // 4K
+#define RBB_BUF_LEN_UNIT     ((size_t)1 << 12)  /* 4K */
 
 
 #if SIZE_MAX > 0xFFFFFFFFu
-#define RBB_BUF_MAX_SIZE     ((size_t)1 << 32)  // 4G @ 64bit
+#define RBB_BUF_MAX_SIZE     ((size_t)1 << 32)  /* 4G @ 64bit */
 #else
-#define RBB_BUF_MAX_SIZE     ((size_t)1 << 30)  // 1G @ 32bit
+#define RBB_BUF_MAX_SIZE     ((size_t)1 << 30)  /* 1G @ 32bit */
 #endif
 
 
