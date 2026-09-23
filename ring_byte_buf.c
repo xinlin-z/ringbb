@@ -16,7 +16,7 @@
  *                   functions with external linkage.
  *
  * Why: system headers may #define any reserved name as a macro; the
- * preprocessor then rewrites your definition and call sites silently.
+ * preprocessor then rewrites your definitions and call sites silently.
  * Non-static reserved names additionally clash with libc/runtime symbols
  * at link time (_exit, _init, _start, ...).
  *
@@ -87,9 +87,7 @@ static bool recap(ringbb *rb,
     if(!buf)
         return false;
 
-    /* copy all bytes to buf */
     read_all2buf(rb, buf + (is_push_back ? 0 : len));
-
     if(len != 0)
     {
         if(is_push_back)
@@ -126,6 +124,9 @@ bool rbb_init(ringbb *rb, size_t len)
 
 void rbb_free(ringbb *rb)
 {
+    if(!rb)
+        return;
+
     free(rb->buf);
     rb->buf = NULL;
     rb->capacity = rb->size = rb->wp = rb->rp = 0;
